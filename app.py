@@ -69,7 +69,7 @@ def handle_message(event):
 	set_user_id()
 	# 設定received_text為收到的訊息
 	received_text = event.message.text
-	push("TEST")
+	push(ing)
 	# 如果沒有找到line_what表單
 	if not find_table("line_what"):
 		push("機器人第一次使用資料庫，已新建資料表")
