@@ -1,0 +1,13 @@
+beautifulsoup4
+flask
+Flask-Migrate
+Flask-Script
+line-bot-sdk
+lxml
+pandas
+psycopg2
+requests
+twstock
+python-pptx
+numpy
+xlrd
