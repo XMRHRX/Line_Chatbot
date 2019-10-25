@@ -10,7 +10,7 @@ import key
 import globalval as gl
 from data import *
 from pchome import *
-from send_email import *
+#from send_email import *
 from shopee import *
 from stock import *
 
