@@ -1,4 +1,4 @@
-from flask import Flask, request, abort
+﻿from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
@@ -10,14 +10,13 @@ import key
 import globalval as gl
 from data import *
 from pchome import *
-#from send_email import *
 from shopee import *
 from stock import *
 
 #初始化跨檔案變數
 gl._init()
 #以下設定此檔的全域變數-----------
-user_id="U64e7bdac6960662e11e711a92b15475d"
+user_id=""
 #功能對應，可改成文字
 menu_stock = "1"
 menu_price = "2"
@@ -69,7 +68,7 @@ def handle_message(event):
 	set_user_id()
 	# 設定received_text為收到的訊息
 	received_text = event.message.text
-	push(received_text)
+
 	# 如果沒有找到line_what表單
 	if not find_table("line_what"):
 		push("機器人第一次使用資料庫，已新建資料表")
@@ -158,9 +157,6 @@ def handle_message(event):
 		else:
 			push("初始狀態")
 		start_message()
-
-	else:
-		push(ing)
 
 # 簡單化傳送指令
 def push(text):
