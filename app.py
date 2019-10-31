@@ -16,7 +16,7 @@ from stock import *
 #初始化跨檔案變數
 gl._init()
 #以下設定此檔的全域變數-----------
-user_id=""
+user_id="U64e7bdac6960662e11e711a92b15475d"
 #功能對應，可改成文字
 menu_stock = "1"
 menu_price = "2"
