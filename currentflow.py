@@ -4,7 +4,7 @@ from app import push
 from stock import *
 
 
-class StateMachine():
+class StateMachine:
 
     def __init__(self, received_text=""):
         self._push_string = ""
