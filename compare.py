@@ -28,7 +28,6 @@ class Compare_Interface:
             data_list+=self.Search(i)
         s=""
         for i in data_list:
-            s+=str(i)
-            s+='\n'
+            s+=i
         return s
 
