@@ -1,10 +1,14 @@
-import child as ch
+# import child as ch
 #import testParent as aa
-a = ch.Child(111)
-a.sss()
+# a = ch.Child(111)
+# a.sss()
 
 # a = aa.Parent()
 # a.sss()
+
+num = {0:"zero",2:"two",1:"one"}
+print("zero" in num)
+
 
 # a = {'test':1,"BON":4}
 # b={"aa":0,"cc":1,'test':2}

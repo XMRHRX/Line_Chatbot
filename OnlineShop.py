@@ -14,7 +14,6 @@ class Shop():
         pass
 
     def checkAccept(self,to_be_check,accept_list):
-        for i in to_be_check:
-            if(i in accept_list):
-                return to_be_check[i]
+        if(to_be_check in accept_list):
+            return accept_list[to_be_check]
         return accept_list[0]
