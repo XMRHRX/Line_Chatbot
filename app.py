@@ -9,8 +9,9 @@ import os
 import key
 import globalval as gl
 from data import *
-from pchome import *
-from shopee import *
+#from pchome import *
+#from shopee import *
+from compare import Compare_Interface
 from stock import *
 
 #初始化跨檔案變數
@@ -67,7 +68,7 @@ def handle_message(event):
 	set_user_id()
 	# 設定received_text為收到的訊息
 	received_text = event.message.text
-
+	comp = Compare_Interface(received_text)
 	# 如果沒有找到line_what表單
 	if not find_table("line_what"):
 		push("機器人第一次使用資料庫，已新建資料表")
@@ -146,7 +147,7 @@ def handle_message(event):
 				menu_reset+':取消\n'+
 				'利用關鍵字搜尋pchome商品:')
 			set_ing(menu_price + '2')
-		elif received_text == "2":
+		elif received_text == "3":
 			push(
 				menu_reset+':取消\n'+
 				'利用關鍵字搜尋pchome和蝦皮商品:')
@@ -154,7 +155,8 @@ def handle_message(event):
 	# 21 使用蝦皮比價
 	elif ing == menu_price + "1":
 		push('蝦皮比價查詢中...')
-		shopee_price_push_message = shopee_price(keyword = received_text)
+		
+		shopee_price_push_message = comp(received_text)
 		push(shopee_price_push_message)
 		start_message()
 	# 22 使用pchome比價
@@ -163,10 +165,11 @@ def handle_message(event):
 		pchome_price_push_message = pchome_price(keyword = received_text)
 		push(pchome_price_push_message)
 		start_message()
-	elif ing == menu_price + "2":
+	elif ing == menu_price + "3":
 		push('比價查詢中...')
-		pchome_price_push_message = pchome_price(keyword = received_text)
-		shopee_price_push_message = shopee_price(keyword = received_text)
+		comp = Compare_Interface(received_text)
+		pchome_price_push_message = comp.shopee()
+		shopee_price_push_message = comp.pchome()
 		push(pchome_price_push_message+'\n'+shopee_price_push_message)
 		start_message()
 	#==============================================================
