@@ -67,8 +67,8 @@ class StateMachine():
     
     def do_SearchStockName(self):
         push('股票代號查詢中...\n')
-		stock_id_push_message = get_stock_code(_filter=self._received_text)
-		push(stock_id_push_message)
+        stock_id_push_message = get_stock_code(_filter=self._received_text)
+        push(stock_id_push_message)
         self.toDefault()
 
     def do_SearchStockID(self):
