@@ -23,13 +23,9 @@ class Compare_Interface:
         return temp.Search()
 
     def SearchALL(self):
-        data_list=[]
         s=""
         for i in self._shop_list:
             s+="\n\n==========  "+i+"  ==========\n\n"
             s+=self.Search(i)
-        # s=""
-        # for i in data_list:
-        #     s+=i
         return s
 

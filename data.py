@@ -5,7 +5,7 @@ import globalval as gl
 from key import URI
 
 # 此檔的全域變數
-user_id = ""
+user_id = "U64e7bdac6960662e11e711a92b15475d"
 
 def set_user_id():
     # 要先global才能在函式裡修改全域變數
