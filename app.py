@@ -51,8 +51,7 @@ def start_message():
 	push(
 		'可使用功能如下：\n'+
 		menu_stock+':股票查詢\n'+
-		menu_price+':網購比價\n'+
-		menu_id+':查看使用者ID')
+		menu_price+':網購比價')
 	set_ing('')
 
 # 處理訊息
@@ -100,9 +99,9 @@ def handle_message(event):
 			set_ing(menu_price)
 			
 			# 傳送使用者ID
-		elif received_text == menu_id:	
-			push(user_id)
-			start_message()
+		"""elif received_text == menu_id:
+			push("此功能以關閉：P")
+			start_message()"""
 	#=======================================================
 	#========================股票查詢功能=====================
 
