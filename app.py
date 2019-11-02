@@ -156,14 +156,14 @@ def handle_message(event):
 	elif ing == menu_price + "1":
 		push('蝦皮比價查詢中...')
 		comp = Compare_Interface(received_text)
-		shopee_price_push_message = comp(received_text)
+		shopee_price_push_message = comp.Search("shopee")
 		push(shopee_price_push_message)
 		start_message()
 	# 22 使用pchome比價
 	elif ing == menu_price + "2":
 		push('pchome比價查詢中...')
 		comp = Compare_Interface(received_text)
-		pchome_price_push_message = comp()
+		pchome_price_push_message = comp.Search("pchome")
 		push(pchome_price_push_message)
 		start_message()
 	elif ing == menu_price + "3":
