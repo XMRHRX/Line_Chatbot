@@ -54,7 +54,7 @@ class Shopee(Shop):
             t = t+'第'+str(i+1)+'名:\n'+\
             name[i]+'\n'+\
             '價格：'+str(price_min[i])+'~'+str(price_max[i])+'\n'+\
-            '購買網址：'+shorten_url('https://shopee.tw/'+name[i].replace(' ','-')+'-i.'+str(shop_id[i])+'.'+str(item_id[i]))+'\n\n'
+            '購買網址：'+self.shorten_url('https://shopee.tw/'+name[i].replace(' ','-')+'-i.'+str(shop_id[i])+'.'+str(item_id[i]))+'\n\n'
         return(t)
 
     #縮網址
