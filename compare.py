@@ -26,5 +26,9 @@ class Compare_Interface:
         data_list=[]
         for i in self._shop_list:
             data_list+=self.Search(i)
-        return data_list
+        s=""
+        for i in data_list:
+            s+=str(i)
+            s+='\n'
+        return s
 
