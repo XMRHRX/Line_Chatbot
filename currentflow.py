@@ -15,7 +15,7 @@ class StateMachine:
 
         # 如果line_what表單裡沒有此使用者資料
         if dt.find_ing() == False:
-            self.ush("使用者第一次使用，已新增資料")
+            self.push("使用者第一次使用，已新增資料")
             self._cur_state = dt.find_ing()
             self.newStart()
         # 抓使用者進度
@@ -66,9 +66,9 @@ class StateMachine:
         }
 
     def do_SearchStockName(self):
-        push('股票代號查詢中...\n')
+        self.push('股票代號查詢中...\n')
         stock_id_push_message = get_stock_code(_filter=self._received_text)
-        push(stock_id_push_message)
+        self.push(stock_id_push_message)
         self.toDefault()
 
     def do_SearchStockID(self):
@@ -138,4 +138,4 @@ class StateMachine:
 
     def showChoice(self):
         for choice in self._state_table[self._cur_state]:
-            print(next(iter(choice)), ":", choice[next(iter(choice))])
+            print(next(iter(choice)), ":", choice[str(next(iter(choice)))])
