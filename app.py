@@ -155,22 +155,23 @@ def handle_message(event):
 	# 21 使用蝦皮比價
 	elif ing == menu_price + "1":
 		push('蝦皮比價查詢中...')
-		
+		comp = Compare_Interface(received_text)
 		shopee_price_push_message = comp(received_text)
 		push(shopee_price_push_message)
 		start_message()
 	# 22 使用pchome比價
 	elif ing == menu_price + "2":
 		push('pchome比價查詢中...')
-		pchome_price_push_message = pchome_price(keyword = received_text)
+		comp = Compare_Interface(received_text)
+		pchome_price_push_message = comp()
 		push(pchome_price_push_message)
 		start_message()
 	elif ing == menu_price + "3":
 		push('比價查詢中...')
 		comp = Compare_Interface(received_text)
-		pchome_price_push_message = comp.shopee()
-		shopee_price_push_message = comp.pchome()
-		push(pchome_price_push_message+'\n'+shopee_price_push_message)
+		price_push_message = comp.SearchALL()
+		
+		push(price_push_message+'\n')
 		start_message()
 	#==============================================================
 
