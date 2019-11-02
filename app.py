@@ -94,8 +94,9 @@ def handle_message(event):
 		elif received_text == menu_price:
 			push(
 				menu_reset+':取消\n'+
-				'1:蝦皮比價\n'+
-				'2:pchome比價')
+				'1:蝦皮 比價\n'+
+				'2:pchome 比價\n'+
+				'3:pchome+蝦皮 比價')
 			set_ing(menu_price)
 			
 			# 傳送使用者ID
@@ -145,6 +146,11 @@ def handle_message(event):
 				menu_reset+':取消\n'+
 				'利用關鍵字搜尋pchome商品:')
 			set_ing(menu_price + '2')
+		elif received_text == "2":
+			push(
+				menu_reset+':取消\n'+
+				'利用關鍵字搜尋pchome和蝦皮商品:')
+			set_ing(menu_price + '3')
 	# 21 使用蝦皮比價
 	elif ing == menu_price + "1":
 		push('蝦皮比價查詢中...')
@@ -156,6 +162,12 @@ def handle_message(event):
 		push('pchome比價查詢中...')
 		pchome_price_push_message = pchome_price(keyword = received_text)
 		push(pchome_price_push_message)
+		start_message()
+	elif ing == menu_price + "2":
+		push('比價查詢中...')
+		pchome_price_push_message = pchome_price(keyword = received_text)
+		shopee_price_push_message = shopee_price(keyword = received_text)
+		push(pchome_price_push_message+'\n'+shopee_price_push_message)
 		start_message()
 	#==============================================================
 
