@@ -1,6 +1,6 @@
 import data as dt
 from compare import Compare_Interface
-from app import push
+
 from stock import *
 
 
@@ -11,11 +11,11 @@ class StateMachine:
         self._received_text = received_text
         self.comp = Compare_Interface(received_text)
         if not dt.find_table("line_what"):
-            push("機器人第一次使用資料庫，已新建資料表")
+            self.push("機器人第一次使用資料庫，已新建資料表")
 
         # 如果line_what表單裡沒有此使用者資料
         if dt.find_ing() == False:
-            push("使用者第一次使用，已新增資料")
+            self.ush("使用者第一次使用，已新增資料")
             self._cur_state = dt.find_ing()
             self.newStart()
         # 抓使用者進度
@@ -73,28 +73,28 @@ class StateMachine:
 
     def do_SearchStockID(self):
 
-        push('即時股價查詢中...')
+        self.push('即時股價查詢中...')
         stock_price_push_message = stock_realtime_price(
             sid=self._received_text)
-        push(stock_price_push_message)
+        self.push(stock_price_push_message)
         self.toDefault()
 
     def ShopeeQuery(self):
-        push('蝦皮比價查詢中...')
+        self.push('蝦皮比價查詢中...')
         shopee_price_push_message = self.comp.Search("shopee")
-        push(shopee_price_push_message)
+        self.push(shopee_price_push_message)
         self.toDefault()
 
     def PchomeQuery(self):
-        push('pchome比價查詢中...')
+        self.push('pchome比價查詢中...')
         pchome_price_push_message = self.comp.Search("pchome")
-        push(pchome_price_push_message)
+        self.push(pchome_price_push_message)
         self.toDefault()
 
     def ALLQuery(self):
-        push('比價查詢中...')
+        self.push('比價查詢中...')
         price_push_message = self.comp.SearchALL()
-        push(price_push_message+'\n')
+        self.push(price_push_message+'\n')
         self.toDefault()
 
     def newStart(self):
@@ -131,6 +131,10 @@ class StateMachine:
                 if (step in self._state_table[self._cur_state][i]):
                     # something from table
                     self._cur_state = self._state_table[self._cur_state][i]["next"]
+
+    def push(self,mes):
+        from app import push
+        push(mes)
 
     def showChoice(self):
         for choice in self._state_table[self._cur_state]:
