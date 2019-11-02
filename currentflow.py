@@ -1,6 +1,8 @@
 import data as dt
 from compare import Compare_Interface
 from app import push
+from stock import *
+
 class StateMachine():
 
 
@@ -33,7 +35,7 @@ class StateMachine():
                             }
         }
         """
-        self._action_list=["InputStockName","InputStockID",]
+        self._action_list=["do_SearchStockName","do_SearchStockID","ShopeeQuery",]
         self._state_table={
             "ChooseService":[
                                 {"1":"查詢股票","next":"StockFunction"},
@@ -64,14 +66,13 @@ class StateMachine():
             
     
     def do_SearchStockName(self):
-        from stock import *
         push('股票代號查詢中...\n')
-		stock_id_push_message = get_stock_code(_filter = self._received_text)
+		stock_id_push_message = get_stock_code(_filter=self._received_text)
 		push(stock_id_push_message)
         self.toDefault()
 
     def do_SearchStockID(self):
-        from stock import *
+        
         push('即時股價查詢中...')
 		stock_price_push_message = stock_realtime_price(sid = self._received_text)
 		push(stock_price_push_message)
