@@ -137,5 +137,6 @@ class StateMachine:
         push(mes)
 
     def showChoice(self):
+        print(self._cur_state)
         for choice in self._state_table[self._cur_state]:
             print(next(iter(choice)), ":", choice[str(next(iter(choice)))])
