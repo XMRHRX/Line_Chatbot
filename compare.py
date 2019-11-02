@@ -16,7 +16,6 @@ class Compare_Interface:
         self._request_num = default_num
         
         self._default_search = default_search
-        self._shop_list = 
         
         
     def Search(self,some_shop):
