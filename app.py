@@ -4,28 +4,21 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 import lxml
 import os
-#以上導入套件
-#以下導入自己的檔案
+# 以上導入套件
+# 以下導入自己的檔案
 from data import *
 import key
 import globalval as gl
 from compare import Compare_Interface
 from stock import *
+
+
 class StateMachine:
     def __init__(self, rece_text=""):
-		
-        self._received_text = rece_text
-        self.comp = Compare_Interface(self._received_text)
-        if not find_table("line_what"):
-            push("機器人第一次使用資料庫，已新建資料表")
+		self._action_list = ["do_SearchStockName",
+                             "do_SearchStockID", "ShopeeQuery", ]
 
-        # 如果line_what表單裡沒有此使用者資料
-        if find_ing() == False:
-            push("使用者第一次使用，已新增資料")
-            self._cur_state = find_ing()
-            self.newStart()
-        # 抓使用者進度
-        """
+		"""
         {
             "當下狀態":{（可以選擇的動作）
                             {1(編號 用編號搜尋選項):"股票"（輸出說明）,"next"(搜尋到後 固定用next呼叫):"選擇股票功能"（下個狀態）},
@@ -40,39 +33,49 @@ class StateMachine:
                             }
         }
         """
-        self._action_list = ["do_SearchStockName",
-                             "do_SearchStockID", "ShopeeQuery", ]
         self._state_table = {
-            "ChooseService": [
-                {"1": "查詢股票", "next": "StockFunction"},
-                {"2": "網購比價", "next": "PriceFunction"}
-            ],
-            "StockFunction": [
-                {"0": "取消", "next": "ChooseService"},
-                {"1": "搜尋股票編號", "next": "InputStockName"},
-                {"2": "搜尋股票價格", "next": "InputStockID"}
-            ],
-            "InputStockName": [
-                {"0": "取消", "next": "ChooseService"},
-                {"1": "查詢中文對照股票代號，可輸入中文或代號", "next": self.do_SearchStockName}
-            ],
+			"ChooseService": [
+				{"1": "查詢股票", "next": "StockFunction"},
+				{"2": "網購比價", "next": "PriceFunction"}
+			],
+			"StockFunction": [
+				{"0": "取消", "next": "ChooseService"},
+				{"1": "搜尋股票編號", "next": "InputStockName"},
+				{"2": "搜尋股票價格", "next": "InputStockID"}
+			],
+			"InputStockName": [
+				{"0": "取消", "next": "ChooseService"},
+				{"1": "查詢中文對照股票代號，可輸入中文或代號", "next": self.do_SearchStockName}
+			],
+			"InputStockID": [
+				{"0": "取消", "next": "ChooseService"},
+				{"1": "查詢即時股價，請輸入代號", "next": self.do_SearchStockID}
+			],
+			"PriceFunction": [
+				{"0": "取消", "next": "ChooseService"},
+				{"1": "Shopee搜尋", "next": self.ShopeeQuery},
+				{"2": "Pchome搜尋", "next": self.PchomeQuery},
+				{"3": "全部搜尋", "next": self.ALLQuery}
+			]}
+			
+        self._received_text = rece_text
+        self.comp = Compare_Interface(self._received_text)
+        if not find_table("line_what"):
+            push("機器人第一次使用資料庫，已新建資料表")
 
-
-            "InputStockID": [
-                {"0": "取消", "next": "ChooseService"},
-                {"1": "查詢即時股價，請輸入代號", "next": self.do_SearchStockID}
-            ],
-            "PriceFunction": [
-                {"0": "取消", "next": "ChooseService"},
-                {"1": "Shopee搜尋", "next": self.ShopeeQuery},
-                {"2": "Pchome搜尋", "next": self.PchomeQuery},
-                {"3": "全部搜尋", "next": self.ALLQuery}
-            ]
-        }
-		if find_ing() in self._state_table:
-        	self._cur_state = find_ing()
+        # 如果line_what表單裡沒有此使用者資料
+        if find_ing() == False:
+            push("使用者第一次使用，已新增資料")
+            self._cur_state = find_ing()
+            self.newStart()
+		elif find_ing() in self._state_table :
+			self._cur_state=find_ing()
 		else:
 			self.toDefault()
+
+        
+        
+		
 
     def do_SearchStockName(self):
         push('股票代號查詢中...\n')
@@ -147,10 +150,10 @@ class StateMachine:
             push(next(iter(choice)), ":", choice[str(next(iter(choice)))])
 
 
-#初始化跨檔案變數
+# 初始化跨檔案變數
 gl._init()
 
-app = Flask(__name__)# __name__是這個檔案的路徑
+app = Flask(__name__)  # __name__是這個檔案的路徑
 # Channel Access Token 設定line API
 line_bot_api = LineBotApi(key.line_bot_api)
 # Channel Secret 設定handler
@@ -158,12 +161,12 @@ handler = WebhookHandler(key.handler)
 
 # 監聽所有來自 /callback 的 Post Request
 # @開頭叫做裝飾器，會執行app.route()，並且把callback()的位置移到app.route()裡面。所以呼叫callback()的話會先執行app.route()
-@app.route("/callback", methods = ['POST']) 
+@app.route("/callback", methods= ['POST'])
 def callback():
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
     # get request body as text
-    body = request.get_data(as_text = True)
+    body = request.get_data(as_text=True)
     app.logger.info("Request body:" + body)
     # handle webhook body
     try:
@@ -176,128 +179,131 @@ def callback():
 
 
 # 處理訊息
-@handler.add(MessageEvent, message = TextMessage)
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # 要先global才能在函式裡修改全域變數
-	global user_id
-	#設定user_id為使用者ID
-	user_id = event.source.user_id
-	# 設定跨檔案變數user_id
-	gl.set_value("user_id", user_id)
-	# 設定received_text為收到的訊息
-	received_text = event.message.text
-	
-	#get current state
-	ing = StateMachine(received_text)
-	#show what can do
-	ing.showChoice()
-	ing.action()
+    global user_id
+    # 設定user_id為使用者ID
+    user_id = event.source.user_id
+    # 設定跨檔案變數user_id
+    gl.set_value("user_id", user_id)
+    # 設定received_text為收到的訊息
+    received_text = event.message.text
 
-	#========================選擇功能===========================	
+    # get current state
+    ing = StateMachine(received_text)
+    # show what can do
+    ing.showChoice()
+    ing.action()
 
-	# if ing == "":
-	# 		#股票
-	# 	if received_text == menu_stock:
-	# 		push(
-	# 			menu_reset+':取消\n'+
-	# 			'1:查詢股票代號\n'+
-	# 			'2:查詢即時股價')
-	# 		set_ing(menu_stock)
-	# 		#比價
-	# 	elif received_text == menu_price:
-	# 		push(
-	# 			menu_reset+':取消\n'+
-	# 			'1:蝦皮 比價\n'+
-	# 			'2:pchome 比價\n'+
-	# 			'3:pchome+蝦皮 比價')
-	# 		set_ing(menu_price)
-			
-	# 		# 傳送使用者ID
-	# 	"""elif received_text == menu_id:
-	# 		push("此功能以關閉：P")
-	# 		start_message()"""
-	# #=======================================================
-	# #========================股票查詢功能=====================
+    # ========================選擇功能===========================
 
-	# #1 股票查詢功能選項
-	# elif ing == menu_stock:
-	# 	if received_text == "1":
-	# 		push(
-	# 			menu_reset+':取消\n'+
-	# 			'查詢中文對照股票代號，可輸入中文或代號:')
-	# 		set_ing(menu_stock + '1')
-	# 	elif received_text == "2":
-	# 		push(
-	# 			menu_reset+':取消\n'+
-	# 			'查詢即時股價，請輸入代號:')
-	# 		set_ing(menu_stock + '2')
-	# # 11 查詢股票代號
-	# elif ing == menu_stock + "1":
-	# 	push('股票代號查詢中...')
-	# 	stock_id_push_message = get_stock_code(_filter = received_text)
-	# 	push(stock_id_push_message)
-	# 	start_message()
-	# # 12 查詢即時股價
-	# elif ing == menu_stock + "2":
-	# 	push('即時股價查詢中...')
-	# 	stock_price_push_message = stock_realtime_price(sid = received_text)
-	# 	push(stock_price_push_message)
-	# 	start_message()
-	# #================================================================
+    # if ing == "":
+    # 		#股票
+    # 	if received_text == menu_stock:
+    # 		push(
+    # 			menu_reset+':取消\n'+
+    # 			'1:查詢股票代號\n'+
+    # 			'2:查詢即時股價')
+    # 		set_ing(menu_stock)
+    # 		#比價
+    # 	elif received_text == menu_price:
+    # 		push(
+    # 			menu_reset+':取消\n'+
+    # 			'1:蝦皮 比價\n'+
+    # 			'2:pchome 比價\n'+
+    # 			'3:pchome+蝦皮 比價')
+    # 		set_ing(menu_price)
 
-	# #======================== 網購比價功能=============================
+    # 		# 傳送使用者ID
+    # 	"""elif received_text == menu_id:
+    # 		push("此功能以關閉：P")
+    # 		start_message()"""
+    # #=======================================================
+    # #========================股票查詢功能=====================
 
-	# # 2 網購比價功能選項
-	# elif ing == menu_price:
-	# 	if received_text == "1":
-	# 		push(
-	# 			menu_reset+':取消\n'+
-	# 			'利用關鍵字搜尋蝦皮商品:')
-	# 		set_ing(menu_price + '1')
-	# 	elif received_text == "2":
-	# 		push(
-	# 			menu_reset+':取消\n'+
-	# 			'利用關鍵字搜尋pchome商品:')
-	# 		set_ing(menu_price + '2')
-	# 	elif received_text == "3":
-	# 		push(
-	# 			menu_reset+':取消\n'+
-	# 			'利用關鍵字搜尋pchome和蝦皮商品:')
-	# 		set_ing(menu_price + '3')
-	# # 21 使用蝦皮比價
-	# elif ing == menu_price + "1":
-	# 	push('蝦皮比價查詢中...')
-	# 	comp = Compare_Interface(received_text)
-	# 	shopee_price_push_message = comp.Search("shopee")
-	# 	push(shopee_price_push_message)
-	# 	start_message()
-	# # 22 使用pchome比價
-	# elif ing == menu_price + "2":
-	# 	push('pchome比價查詢中...')
-	# 	comp = Compare_Interface(received_text)
-	# 	pchome_price_push_message = comp.Search("pchome")
-	# 	push(pchome_price_push_message)
-	# 	start_message()
-	# elif ing == menu_price + "3":
-	# 	push('比價查詢中...')
-	# 	comp = Compare_Interface(received_text)
-	# 	price_push_message = comp.SearchALL()
-		
-	# 	push(price_push_message+'\n')
-	# 	start_message()
-	# #==============================================================
+    # #1 股票查詢功能選項
+    # elif ing == menu_stock:
+    # 	if received_text == "1":
+    # 		push(
+    # 			menu_reset+':取消\n'+
+    # 			'查詢中文對照股票代號，可輸入中文或代號:')
+    # 		set_ing(menu_stock + '1')
+    # 	elif received_text == "2":
+    # 		push(
+    # 			menu_reset+':取消\n'+
+    # 			'查詢即時股價，請輸入代號:')
+    # 		set_ing(menu_stock + '2')
+    # # 11 查詢股票代號
+    # elif ing == menu_stock + "1":
+    # 	push('股票代號查詢中...')
+    # 	stock_id_push_message = get_stock_code(_filter = received_text)
+    # 	push(stock_id_push_message)
+    # 	start_message()
+    # # 12 查詢即時股價
+    # elif ing == menu_stock + "2":
+    # 	push('即時股價查詢中...')
+    # 	stock_price_push_message = stock_realtime_price(sid = received_text)
+    # 	push(stock_price_push_message)
+    # 	start_message()
+    # #================================================================
 
-	# # 傳送現在在做什麼的代號
-	# elif received_text == 'ing':
-	# 	if ing:
-	# 		push(ing)
-	# 	else:
-	# 		push("初始狀態")
-	# 	start_message()
+    # #======================== 網購比價功能=============================
+
+    # # 2 網購比價功能選項
+    # elif ing == menu_price:
+    # 	if received_text == "1":
+    # 		push(
+    # 			menu_reset+':取消\n'+
+    # 			'利用關鍵字搜尋蝦皮商品:')
+    # 		set_ing(menu_price + '1')
+    # 	elif received_text == "2":
+    # 		push(
+    # 			menu_reset+':取消\n'+
+    # 			'利用關鍵字搜尋pchome商品:')
+    # 		set_ing(menu_price + '2')
+    # 	elif received_text == "3":
+    # 		push(
+    # 			menu_reset+':取消\n'+
+    # 			'利用關鍵字搜尋pchome和蝦皮商品:')
+    # 		set_ing(menu_price + '3')
+    # # 21 使用蝦皮比價
+    # elif ing == menu_price + "1":
+    # 	push('蝦皮比價查詢中...')
+    # 	comp = Compare_Interface(received_text)
+    # 	shopee_price_push_message = comp.Search("shopee")
+    # 	push(shopee_price_push_message)
+    # 	start_message()
+    # # 22 使用pchome比價
+    # elif ing == menu_price + "2":
+    # 	push('pchome比價查詢中...')
+    # 	comp = Compare_Interface(received_text)
+    # 	pchome_price_push_message = comp.Search("pchome")
+    # 	push(pchome_price_push_message)
+    # 	start_message()
+    # elif ing == menu_price + "3":
+    # 	push('比價查詢中...')
+    # 	comp = Compare_Interface(received_text)
+    # 	price_push_message = comp.SearchALL()
+
+    # 	push(price_push_message+'\n')
+    # 	start_message()
+    # #==============================================================
+
+    # # 傳送現在在做什麼的代號
+    # elif received_text == 'ing':
+    # 	if ing:
+    # 		push(ing)
+    # 	else:
+    # 		push("初始狀態")
+    # 	start_message()
 
 # 簡單化傳送指令
+
+
 def push(text):
-	line_bot_api.push_message(user_id, TextSendMessage(text))
+    line_bot_api.push_message(user_id, TextSendMessage(text))
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
