@@ -126,7 +126,10 @@ class StateMachine:
                     # something from table
 					if "finish" in i:
 						push(i["finish"])
-					self._cur_state = i["next"]
+						self._cur_state = i["next"]
+					else:
+						self._cur_state = i["next"]
+						self.showChoice()
 					break
 		
 
@@ -185,109 +188,7 @@ def handle_message(event):
 	# show what to do next time
 	ing.showChoice()
 
-    # ========================選擇功能===========================
-
-    # if ing == "":
-    # 		#股票
-    # 	if received_text == menu_stock:
-    # 		push(
-    # 			menu_reset+':取消\n'+
-    # 			'1:查詢股票代號\n'+
-    # 			'2:查詢即時股價')
-    # 		set_ing(menu_stock)
-    # 		#比價
-    # 	elif received_text == menu_price:
-    # 		push(
-    # 			menu_reset+':取消\n'+
-    # 			'1:蝦皮 比價\n'+
-    # 			'2:pchome 比價\n'+
-    # 			'3:pchome+蝦皮 比價')
-    # 		set_ing(menu_price)
-
-    # 		# 傳送使用者ID
-    # 	"""elif received_text == menu_id:
-    # 		push("此功能以關閉：P")
-    # 		start_message()"""
-    # #=======================================================
-    # #========================股票查詢功能=====================
-
-    # #1 股票查詢功能選項
-    # elif ing == menu_stock:
-    # 	if received_text == "1":
-    # 		push(
-    # 			menu_reset+':取消\n'+
-    # 			'查詢中文對照股票代號，可輸入中文或代號:')
-    # 		set_ing(menu_stock + '1')
-    # 	elif received_text == "2":
-    # 		push(
-    # 			menu_reset+':取消\n'+
-    # 			'查詢即時股價，請輸入代號:')
-    # 		set_ing(menu_stock + '2')
-    # # 11 查詢股票代號
-    # elif ing == menu_stock + "1":
-    # 	push('股票代號查詢中...')
-    # 	stock_id_push_message = get_stock_code(_filter = received_text)
-    # 	push(stock_id_push_message)
-    # 	start_message()
-    # # 12 查詢即時股價
-    # elif ing == menu_stock + "2":
-    # 	push('即時股價查詢中...')
-    # 	stock_price_push_message = stock_realtime_price(sid = received_text)
-    # 	push(stock_price_push_message)
-    # 	start_message()
-    # #================================================================
-
-    # #======================== 網購比價功能=============================
-
-    # # 2 網購比價功能選項
-    # elif ing == menu_price:
-    # 	if received_text == "1":
-    # 		push(
-    # 			menu_reset+':取消\n'+
-    # 			'利用關鍵字搜尋蝦皮商品:')
-    # 		set_ing(menu_price + '1')
-    # 	elif received_text == "2":
-    # 		push(
-    # 			menu_reset+':取消\n'+
-    # 			'利用關鍵字搜尋pchome商品:')
-    # 		set_ing(menu_price + '2')
-    # 	elif received_text == "3":
-    # 		push(
-    # 			menu_reset+':取消\n'+
-    # 			'利用關鍵字搜尋pchome和蝦皮商品:')
-    # 		set_ing(menu_price + '3')
-    # # 21 使用蝦皮比價
-    # elif ing == menu_price + "1":
-    # 	push('蝦皮比價查詢中...')
-    # 	comp = Compare_Interface(received_text)
-    # 	shopee_price_push_message = comp.Search("shopee")
-    # 	push(shopee_price_push_message)
-    # 	start_message()
-    # # 22 使用pchome比價
-    # elif ing == menu_price + "2":
-    # 	push('pchome比價查詢中...')
-    # 	comp = Compare_Interface(received_text)
-    # 	pchome_price_push_message = comp.Search("pchome")
-    # 	push(pchome_price_push_message)
-    # 	start_message()
-    # elif ing == menu_price + "3":
-    # 	push('比價查詢中...')
-    # 	comp = Compare_Interface(received_text)
-    # 	price_push_message = comp.SearchALL()
-
-    # 	push(price_push_message+'\n')
-    # 	start_message()
-    # #==============================================================
-
-    # # 傳送現在在做什麼的代號
-    # elif received_text == 'ing':
-    # 	if ing:
-    # 		push(ing)
-    # 	else:
-    # 		push("初始狀態")
-    # 	start_message()
-
-# 簡單化傳送指令
+    
 
 
 def push(text):

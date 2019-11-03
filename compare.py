@@ -18,8 +18,8 @@ class Compare_Interface:
         self._shop_list=['pchome','shopee']
         
         
-    def Search(self,some_shop):
-        temp = self.getObj(some_shop)
+    def Search(self,shopToGet):
+        temp = self.getObj(shopToGet)
         return temp.Search()
 
     def SearchALL(self):
