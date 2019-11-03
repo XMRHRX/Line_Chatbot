@@ -42,8 +42,16 @@ class StateMachine:
 			],
 			"InputStockName": [
 				{"0": "取消", "next": "ChooseService"},
-				{"1": "查詢中文對照股票代號，可輸入中文或代號", "next": self.do_SearchStockName}
+				{"1": "查詢中文對照股票代號，可輸入中文或代號", "next": 'do_SearchStockName'}
 			],
+			"do_SearchStockName":[{"FUNC":self.do_SearchStockName}],
+			"do_SearchStockID":[{"FUNC":self.do_SearchStockID}],
+			"ShopeeQuery":[{"FUNC":self.ShopeeQuery}],
+			"PchomeQuery":[{"FUNC":self.PchomeQuery}],
+			"ALLQuery":[{"FUNC":self.ALLQuery}],
+			"":[{"FUNC"}],
+			"":[{"FUNC"}],
+
 			"InputStockID": [
 				{"0": "取消", "next": "ChooseService"},
 				{"1": "查詢即時股價，請輸入代號", "next": self.do_SearchStockID}
@@ -106,8 +114,8 @@ class StateMachine:
 		self._cur_state = "ChooseService"
 
 	def action(self):
-		if callable(self._cur_state):
-			self._cur_state()
+		if  "FUNC" in self._state_table[self._cur_state]:
+			self._state_table[self._cur_state]["FUNC"]()
 			self.toDefault()
 		else:
 			self.move()
