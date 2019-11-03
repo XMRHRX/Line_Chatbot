@@ -44,14 +44,6 @@ class StateMachine:
 				{"0": "取消", "next": "ChooseService"},
 				{"1": "查詢中文對照股票代號，可輸入中文或代號", "next": 'do_SearchStockName'}
 			],
-			"do_SearchStockName":[{"FUNC":self.do_SearchStockName}],
-			"do_SearchStockID":[{"FUNC":self.do_SearchStockID}],
-			"ShopeeQuery":[{"FUNC":self.ShopeeQuery}],
-			"PchomeQuery":[{"FUNC":self.PchomeQuery}],
-			"ALLQuery":[{"FUNC":self.ALLQuery}],
-			"":[{"FUNC"}],
-			"":[{"FUNC"}],
-
 			"InputStockID": [
 				{"0": "取消", "next": "ChooseService"},
 				{"1": "查詢即時股價，請輸入代號", "next": "do_SearchStockID"}
@@ -61,7 +53,13 @@ class StateMachine:
 				{"1": "Shopee搜尋", "next": "ShopeeQuery"},
 				{"2": "Pchome搜尋", "next": "PchomeQuery"},
 				{"3": "全部搜尋", "next": "ALLQuery"}
-			]}
+			],
+			"do_SearchStockName":[{"FUNC":self.do_SearchStockName}],
+			"do_SearchStockID":[{"FUNC":self.do_SearchStockID}],
+			"ShopeeQuery":[{"FUNC":self.ShopeeQuery}],
+			"PchomeQuery":[{"FUNC":self.PchomeQuery}],
+			"ALLQuery":[{"FUNC":self.ALLQuery}],
+			}
 			
 		self._received_text = rece_text
 		self.comp = Compare_Interface(self._received_text)
