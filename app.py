@@ -112,7 +112,7 @@ class StateMachine:
 		self._cur_state = "ChooseService"
 
 	def action(self):
-		if  "FUNC" in self._state_table[self._cur_state]:
+		if  "FUNC" in self._state_table[self._cur_state][0]:
 			self._state_table[self._cur_state]["FUNC"]()
 			self.toDefault()
 		else:
