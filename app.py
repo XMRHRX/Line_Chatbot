@@ -129,6 +129,7 @@ class StateMachine:
 						self._cur_state = i["next"]
 					else:
 						self._cur_state = i["next"]
+						# show what to do next time
 						self.showChoice()
 					break
 		
@@ -185,8 +186,7 @@ def handle_message(event):
     # get current state
 	ing = StateMachine(received_text)
 	ing.action()
-	# show what to do next time
-	ing.showChoice()
+	
 
     
 
