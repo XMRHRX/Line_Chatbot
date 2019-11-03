@@ -176,19 +176,18 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # 要先global才能在函式裡修改全域變數
-    global user_id
+	global user_id
     # 設定user_id為使用者ID
-    user_id = event.source.user_id
+	user_id = event.source.user_id
     # 設定跨檔案變數user_id
-    gl.set_value("user_id", user_id)
+	gl.set_value("user_id", user_id)
     # 設定received_text為收到的訊息
-    received_text = event.message.text
+	received_text = event.message.text
 
     # get current state
-    ing = StateMachine(received_text)
-    ing.action()
-	
-	# show what can do
+	ing = StateMachine(received_text)
+	ing.action()
+	# show what to do next time
 	ing.showChoice()
 
     # ========================選擇功能===========================
