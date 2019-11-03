@@ -25,7 +25,6 @@ class StateMachine:
             self._cur_state = find_ing()
             self.newStart()
         # 抓使用者進度
-        self._cur_state = find_ing()
         """
         {
             "當下狀態":{（可以選擇的動作）
@@ -46,7 +45,7 @@ class StateMachine:
         self._state_table = {
             "ChooseService": [
                 {"1": "查詢股票", "next": "StockFunction"},
-                {2: "網購比價", "next": "PriceFunction"}
+                {"2": "網購比價", "next": "PriceFunction"}
             ],
             "StockFunction": [
                 {"0": "取消", "next": "ChooseService"},
@@ -70,6 +69,10 @@ class StateMachine:
                 {"3": "全部搜尋", "next": self.ALLQuery}
             ]
         }
+		if find_ing in self._state_table:
+        	self._cur_state = find_ing()
+		else:
+			self.toDefault()
 
     def do_SearchStockName(self):
         push('股票代號查詢中...\n')
