@@ -123,16 +123,16 @@ class StateMachine:
 			self.toDefault()
 			return
         # check current is in table
-		elif not (self._cur_state in self._state_table):
-			self.toDefault()
-
 		elif(self._cur_state in self._state_table):
             # check every choice depend on current state
 			for i in self._state_table[self._cur_state]:
                 # find
-				if (step in self._state_table[self._cur_state][i]):
+				if (step in i):
                     # something from table
-					self._cur_state = self._state_table[self._cur_state][i]["next"]
+					self._cur_state = i["next"]
+					break
+
+		
 
 	def showChoice(self):
 		push(self._cur_state)
