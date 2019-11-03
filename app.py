@@ -109,7 +109,6 @@ class StateMachine:
 			self.toDefault()
 		else:
 			self.move()
-		self.showChoice()
 		set_ing(self._cur_state)
 
 	def move(self):
