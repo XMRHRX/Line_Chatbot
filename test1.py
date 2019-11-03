@@ -44,7 +44,24 @@ table={
                         ]
         }
 
-cur = 'ChooseService'
-step = 1
-for i in table[cur]:
-    print(next(iter(i)),":",i[next(iter(i))] )
+# cur = 'ChooseService'
+# step = 1
+# for i in table[cur]:
+#     print(next(iter(i)),":",i[next(iter(i))] )
+
+state_table = {
+            "ChooseService": [
+                {"1": "查詢股票", "next": "StockFunction"},
+                {"2": "網購比價", "next": "PriceFunction"}
+            ],
+            "StockFunction": [
+                {"0": "取消", "next": "ChooseService"},
+                {"1": "搜尋股票編號", "next": "InputStockName"},
+                {"2": "搜尋股票價格", "next": "InputStockID"}
+            ]
+        }
+
+cur='ChooseService'
+print(13)
+for choice in state_table[cur]:
+    print(next(iter(choice)), ":", choice[str(next(iter(choice)))])

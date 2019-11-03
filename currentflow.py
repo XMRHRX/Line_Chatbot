@@ -1,6 +1,7 @@
 import data as dt
 from compare import Compare_Interface
 
+
 from stock import *
 
 
