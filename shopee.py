@@ -15,10 +15,10 @@ class Shopee(Shop):
         super().__init__(target , default_search  ,defaul_sort, default_num )
         accept_sort = {0:'asc',1:'desc'}
         accept_search = {0:'price',1:'relevancy',2:'ctime',3:'sales'}
-        self.request_num=self._request_num
-        self.target = self._target
-        self.order_by = self.checkAccept(self._sort_by , accept_sort )
-        self.search_by = self.checkAccept(self._search_by, accept_search )
+        self.request_num=default_num
+        self.target = target
+        self.order_by = self.checkAccept(defaul_sort , accept_sort )
+        self.search_by = self.checkAccept(default_search, accept_search )
 
 
     def Search(self):

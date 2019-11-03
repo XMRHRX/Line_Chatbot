@@ -12,10 +12,10 @@ class PChome(Shop):
         super().__init__(target , default_search  ,defaul_sort, default_num)
         accept_sort = {0:'ac',1:'dc'}
         accept_search = {0:'prc',1:'rnk',2:'new',3:'sale'}#0:price 2:new 1:accuracy
-        self.request_num=self._request_num
-        self.target = self._target
-        self.order_by = self.checkAccept(self._sort_by , accept_sort )
-        self.search_by = self.checkAccept(self._search_by, accept_search )
+        self.request_num=default_num
+        self.target = target
+        self.order_by = self.checkAccept(defaul_sort , accept_sort )
+        self.search_by = self.checkAccept(default_search, accept_search )
 
     
 
