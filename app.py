@@ -109,6 +109,7 @@ class StateMachine:
 			self.toDefault()
 		else:
 			self.move()
+		self.showChoice()
 		set_ing(self._cur_state)
 
 	def move(self):
@@ -126,15 +127,13 @@ class StateMachine:
                     # something from table
 					if "finish" in i:
 						push(i["finish"])
-						self._cur_state = i["next"]
-					else:
-						self._cur_state = i["next"]
-						# show what to do next time
-						self.showChoice()
+					self._cur_state = i["next"]
 					break
 		
 
 	def showChoice(self):
+		if  "FUNC" in self._state_table[self._cur_state][0]:
+			return
 		temp="=======請輸入數字=========\n"
 		for choice in self._state_table[self._cur_state]:
 			temp+=str(next(iter(choice)))+":"+str(choice[next(iter(choice))])
@@ -186,7 +185,9 @@ def handle_message(event):
     # get current state
 	ing = StateMachine(received_text)
 	ing.action()
-	
+
+	# show what to do next time
+	ing.showChoice()
 
     
 
