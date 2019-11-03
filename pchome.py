@@ -10,7 +10,7 @@ class PChome(Shop):
     #參數
     def __init__(self,target , default_search  ,defaul_sort, default_num ):
         super().__init__(target , default_search  ,defaul_sort, default_num)
-        accept_sort = {0:'ac',1:'dc'}
+        accept_sort = {1:'ac',0:'dc'}
         accept_search = {0:'prc',1:'rnk',2:'new',3:'sale'}#0:price 2:new 1:accuracy
         self.request_num=default_num
         self.target = target

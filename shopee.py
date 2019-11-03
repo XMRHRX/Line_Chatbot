@@ -13,7 +13,7 @@ class Shopee(Shop):
 
     def __init__(self,target , default_search  ,defaul_sort, default_num):
         super().__init__(target , default_search  ,defaul_sort, default_num )
-        accept_sort = {0:'asc',1:'desc'}
+        accept_sort = {1:'asc',0:'desc'}
         accept_search = {0:'price',1:'relevancy',2:'ctime',3:'sales'}
         self.request_num=default_num
         self.target = target
