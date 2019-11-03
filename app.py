@@ -186,9 +186,10 @@ def handle_message(event):
 
     # get current state
     ing = StateMachine(received_text)
-    # show what can do
-    ing.showChoice()
     ing.action()
+	
+	# show what can do
+	ing.showChoice()
 
     # ========================選擇功能===========================
 
