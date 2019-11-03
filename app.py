@@ -54,13 +54,13 @@ class StateMachine:
 
 			"InputStockID": [
 				{"0": "取消", "next": "ChooseService"},
-				{"1": "查詢即時股價，請輸入代號", "next": self.do_SearchStockID}
+				{"1": "查詢即時股價，請輸入代號", "next": "do_SearchStockID"}
 			],
 			"PriceFunction": [
 				{"0": "取消", "next": "ChooseService"},
-				{"1": "Shopee搜尋", "next": self.ShopeeQuery},
-				{"2": "Pchome搜尋", "next": self.PchomeQuery},
-				{"3": "全部搜尋", "next": self.ALLQuery}
+				{"1": "Shopee搜尋", "next": "ShopeeQuery"},
+				{"2": "Pchome搜尋", "next": "PchomeQuery"},
+				{"3": "全部搜尋", "next": "ALLQuery"}
 			]}
 			
 		self._received_text = rece_text
