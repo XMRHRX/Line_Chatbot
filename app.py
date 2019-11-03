@@ -136,12 +136,12 @@ class StateMachine:
 					break
 		
 
-		
-
 	def showChoice(self):
-		push(self._cur_state)
+		temp=""
 		for choice in self._state_table[self._cur_state]:
-			push(next(iter(choice))+":"+choice[next(iter(choice))])
+			temp+=str(next(iter(choice)))+":"+str(choice[next(iter(choice))])
+			temp+='\n'
+		push(temp)
 
 
 # 初始化跨檔案變數
