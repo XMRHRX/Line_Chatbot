@@ -46,7 +46,7 @@ class StateMachine:
         self._state_table = {
             "ChooseService": [
                 {"1": "查詢股票", "next": "StockFunction"},
-                {"2": "網購比價", "next": "PriceFunction"}
+                {2: "網購比價", "next": "PriceFunction"}
             ],
             "StockFunction": [
                 {"0": "取消", "next": "ChooseService"},
