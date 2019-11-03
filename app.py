@@ -58,7 +58,7 @@ class StateMachine:
 			"do_SearchStockID":[{"FUNC":self.do_SearchStockID}],
 			"ShopeeQuery":[{"FUNC":self.ShopeeQuery}],
 			"PchomeQuery":[{"FUNC":self.PchomeQuery}],
-			"ALLQuery":[{"FUNC":self.ALLQuery}],
+			"ALLQuery":[{"FUNC":self.ALLQuery}]
 			}
 			
 		self._received_text = rece_text
