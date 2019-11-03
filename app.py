@@ -76,32 +76,27 @@ class StateMachine:
 		push('股票代號查詢中...\n')
 		stock_id_push_message = get_stock_code(_filter=self._received_text)
 		push(stock_id_push_message)
-		self.toDefault()
 
 	def do_SearchStockID(self):	
 		push('即時股價查詢中...')
 		stock_price_push_message = stock_realtime_price(
 	        sid=self._received_text)
 		push(stock_price_push_message)
-		self.toDefault()
 
 	def ShopeeQuery(self):
 		push('蝦皮比價查詢中...')
 		shopee_price_push_message = self.comp.Search("shopee")
 		push(shopee_price_push_message)
-		self.toDefault()
 
 	def PchomeQuery(self):
 		push('pchome比價查詢中...')
 		pchome_price_push_message = self.comp.Search("pchome")
 		push(pchome_price_push_message)
-		self.toDefault()
 
 	def ALLQuery(self):
 		push('比價查詢中...')
 		price_push_message = self.comp.SearchALL()
 		push(price_push_message+'\n')
-		self.toDefault()
 
 	def newStart(self):
 		self.toDefault()
@@ -113,8 +108,10 @@ class StateMachine:
 	def action(self):
 		if callable(self._cur_state):
 			self._cur_state()
+			self.toDefault()
 		else:
 			self.move()
+		set_ing(self._cur_state)
 
 	def move(self):
         # prevent bypass
@@ -131,6 +128,7 @@ class StateMachine:
                     # something from table
 					self._cur_state = i["next"]
 					break
+		
 
 		
 
