@@ -14,10 +14,7 @@ from stock import *
 
 
 class StateMachine:
-    def __init__(self, rece_text=""):
-		self._action_list = ["do_SearchStockName",
-                             "do_SearchStockID", "ShopeeQuery", ]
-
+	def __init__(self, rece_text=""):
 		"""
         {
             "當下狀態":{（可以選擇的動作）
@@ -33,7 +30,7 @@ class StateMachine:
                             }
         }
         """
-        self._state_table = {
+		self._state_table = {
 			"ChooseService": [
 				{"1": "查詢股票", "next": "StockFunction"},
 				{"2": "網購比價", "next": "PriceFunction"}
@@ -58,96 +55,89 @@ class StateMachine:
 				{"3": "全部搜尋", "next": self.ALLQuery}
 			]}
 			
-        self._received_text = rece_text
-        self.comp = Compare_Interface(self._received_text)
-        if not find_table("line_what"):
-            push("機器人第一次使用資料庫，已新建資料表")
+		self._received_text = rece_text
+		self.comp = Compare_Interface(self._received_text)
+		if not find_table("line_what"):
+		    push("機器人第一次使用資料庫，已新建資料表")
 
-        # 如果line_what表單裡沒有此使用者資料
-        if find_ing() == False:
-            push("使用者第一次使用，已新增資料")
-            self._cur_state = find_ing()
-            self.newStart()
+		# 如果line_what表單裡沒有此使用者資料
+		if find_ing() == False:
+			push("使用者第一次使用，已新增資料")
+			self._cur_state = find_ing()
+			self.newStart()
 		elif find_ing() in self._state_table :
 			self._cur_state=find_ing()
 		else:
 			self.toDefault()
 
-        
-        
 		
 
-    def do_SearchStockName(self):
-        push('股票代號查詢中...\n')
-        stock_id_push_message = get_stock_code(_filter=self._received_text)
-        push(stock_id_push_message)
-        self.toDefault()
+	def do_SearchStockName(self):
+		push('股票代號查詢中...\n')
+		stock_id_push_message = get_stock_code(_filter=self._received_text)
+		push(stock_id_push_message)
+		self.toDefault()
 
-    def do_SearchStockID(self):
+	def do_SearchStockID(self):	
+		push('即時股價查詢中...')
+		stock_price_push_message = stock_realtime_price(
+	        sid=self._received_text)
+		push(stock_price_push_message)
+		self.toDefault()
 
-        push('即時股價查詢中...')
-        stock_price_push_message = stock_realtime_price(
-            sid=self._received_text)
-        push(stock_price_push_message)
-        self.toDefault()
+	def ShopeeQuery(self):
+		push('蝦皮比價查詢中...')
+		shopee_price_push_message = self.comp.Search("shopee")
+		push(shopee_price_push_message)
+		self.toDefault()
 
-    def ShopeeQuery(self):
-        push('蝦皮比價查詢中...')
-        shopee_price_push_message = self.comp.Search("shopee")
-        push(shopee_price_push_message)
-        self.toDefault()
+	def PchomeQuery(self):
+		push('pchome比價查詢中...')
+		pchome_price_push_message = self.comp.Search("pchome")
+		push(pchome_price_push_message)
+		self.toDefault()
 
-    def PchomeQuery(self):
-        push('pchome比價查詢中...')
-        pchome_price_push_message = self.comp.Search("pchome")
-        push(pchome_price_push_message)
-        self.toDefault()
+	def ALLQuery(self):
+		push('比價查詢中...')
+		price_push_message = self.comp.SearchALL()
+		push(price_push_message+'\n')
+		self.toDefault()
 
-    def ALLQuery(self):
-        push('比價查詢中...')
-        price_push_message = self.comp.SearchALL()
-        push(price_push_message+'\n')
-        self.toDefault()
+	def newStart(self):
+		self.toDefault()
+		self.showChoice()
 
-    def newStart(self):
-        self.toDefault()
-        self.showChoice()
+	def toDefault(self):
+		self._cur_state = "ChooseService"
 
-    def toDefault(self):
-        self._cur_state = "ChooseService"
+	def action(self):
+		if callable(self._cur_state):
+			self._cur_state()
+		else:
+			self.move()
 
-    def action(self):
-        if self._cur_state in self._action_list:
-            self._cur_state()
-        else:
-            self.move()
-
-    def move(self):
+	def move(self):
         # prevent bypass
-        step = self._received_text
-        if (step.lower() == "next"):
-            self.toDefault()
-            return
-
-        if self._cur_state in self._action_list:
-            self._cur_state()
-
+		step = self._received_text
+		if (step.lower() == "next"):
+			self.toDefault()
+			return
         # check current is in table
-        elif not (self._cur_state in self._state_table):
-            self.toDefault()
+		elif not (self._cur_state in self._state_table):
+			self.toDefault()
 
-        elif(self._cur_state in self._state_table):
+		elif(self._cur_state in self._state_table):
             # check every choice depend on current state
-            for i in self._state_table[self._cur_state]:
+			for i in self._state_table[self._cur_state]:
                 # find
-                if (step in self._state_table[self._cur_state][i]):
+				if (step in self._state_table[self._cur_state][i]):
                     # something from table
-                    self._cur_state = self._state_table[self._cur_state][i]["next"]
+					self._cur_state = self._state_table[self._cur_state][i]["next"]
 
-    def showChoice(self):
-        push(self._cur_state)
-        for choice in self._state_table[self._cur_state]:
-            push(next(iter(choice)), ":", choice[str(next(iter(choice)))])
+	def showChoice(self):
+		push(self._cur_state)
+		for choice in self._state_table[self._cur_state]:
+			push(next(iter(choice))+":"+choice[str(next(iter(choice)))])
 
 
 # 初始化跨檔案變數

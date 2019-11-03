@@ -62,6 +62,8 @@ state_table = {
         }
 
 cur='ChooseService'
-print(13)
-for choice in state_table[cur]:
-    print(next(iter(choice)), ":", choice[str(next(iter(choice)))])
+def test():
+    pass
+#print(type(test))
+if(callable(test)):
+    print("asd")
