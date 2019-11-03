@@ -113,7 +113,7 @@ class StateMachine:
 
 	def action(self):
 		if  "FUNC" in self._state_table[self._cur_state][0]:
-			self._state_table[self._cur_state]["FUNC"]()
+			self._state_table[self._cur_state][0]["FUNC"]()
 			self.toDefault()
 		else:
 			self.move()
