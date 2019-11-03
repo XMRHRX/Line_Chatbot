@@ -37,22 +37,14 @@ class StateMachine:
 			],
 			"StockFunction": [
 				{"0": "取消", "next": "ChooseService"},
-				{"1": "搜尋股票編號", "next": "InputStockName"},
-				{"2": "搜尋股票價格", "next": "InputStockID"}
-			],
-			"InputStockName": [
-				{"0": "取消", "next": "ChooseService"},
-				{"1": "查詢中文對照股票代號，可輸入中文或代號", "next": 'do_SearchStockName'}
-			],
-			"InputStockID": [
-				{"0": "取消", "next": "ChooseService"},
-				{"1": "查詢即時股價，請輸入代號", "next": "do_SearchStockID"}
+				{"1": "查詢股票代號", "next": "do_SearchStockName","finish":"請輸入中文或代號"},
+				{"2": "搜尋股票價格,", "next": "do_SearchStockID","finish":"請輸入代號"}
 			],
 			"PriceFunction": [
 				{"0": "取消", "next": "ChooseService"},
-				{"1": "Shopee搜尋", "next": "ShopeeQuery"},
-				{"2": "Pchome搜尋", "next": "PchomeQuery"},
-				{"3": "全部搜尋", "next": "ALLQuery"}
+				{"1": "Shopee搜尋", "next": "ShopeeQuery","finish":"請輸入要搜尋的物品"},
+				{"2": "Pchome搜尋", "next": "PchomeQuery","finish":"請輸入要搜尋的物品"},
+				{"3": "全部搜尋", "next": "ALLQuery","finish":"請輸入要搜尋的物品"}
 			],
 			"do_SearchStockName":[{"FUNC":self.do_SearchStockName}],
 			"do_SearchStockID":[{"FUNC":self.do_SearchStockID}],
@@ -132,15 +124,18 @@ class StateMachine:
                 # find
 				if (step in i):
                     # something from table
+					if "finish" in i:
+						push(i["finish"])
 					self._cur_state = i["next"]
 					break
 		
 
 	def showChoice(self):
-		temp=""
+		temp="=======請輸入數字=========\n"
 		for choice in self._state_table[self._cur_state]:
 			temp+=str(next(iter(choice)))+":"+str(choice[next(iter(choice))])
 			temp+='\n'
+		temp+="======================="
 		push(temp)
 
 
