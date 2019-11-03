@@ -69,7 +69,7 @@ class StateMachine:
                 {"3": "全部搜尋", "next": self.ALLQuery}
             ]
         }
-		if find_ing in self._state_table:
+		if find_ing() in self._state_table:
         	self._cur_state = find_ing()
 		else:
 			self.toDefault()
