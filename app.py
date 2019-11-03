@@ -141,7 +141,7 @@ class StateMachine:
 	def showChoice(self):
 		push(self._cur_state)
 		for choice in self._state_table[self._cur_state]:
-			push(next(iter(choice))+":"+choice[str(next(iter(choice)))])
+			push(next(iter(choice))+":"+choice[next(iter(choice))])
 
 
 # 初始化跨檔案變數
