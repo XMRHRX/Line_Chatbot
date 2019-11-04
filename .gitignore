@@ -1,4 +1,3 @@
 *.sh
 key.py
-*.zi
-igtest.test
+*.zip
